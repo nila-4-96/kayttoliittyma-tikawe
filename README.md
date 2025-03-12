@@ -7,3 +7,4 @@
 * Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja ja käyttäjän lisäämät päivitykset.
 * Käyttäjä pystyy valitsemaan päivitykselle yhden tai useamman luokittelun (esim. päivityksen tyyppi, käsittelytila (vastaanotettu, käsitellään, käsitelty), ja tärkeysaste).
 * Käyttäjä pystyy kommentoimaan ja päivittämään toisten käyttäjien päivityksiä.
+* (Jos mahdollista) Kayttöliittymä toimii pohjana joka täyttää kriteerit tehtävänannolle. Tämän jälkeen pohja on avoinna mahdollisille lisäosille ja toiminnoille joihin kaikki käyttäjät voivat myös lisätä päivityksiä ja kommentteja.
