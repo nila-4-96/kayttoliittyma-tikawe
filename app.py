@@ -1,27 +1,34 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, request
+import sqlite3
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    db = sqlite3.connect("database.db")
+    db.execute("INSERT INTO visits (visited_at) VALUES (datetime('now'))")
+    db.commit()
+    result = db.execute("SELECT COUNT(*) FROM visits").fetchone()
+    count = result[0]
+    db.close()
+    return "Sivua on ladattu " + str(count) + " kertaa"
 
-@app.route("/page1")
-def page1():
-    return "Tämä lienee sivu 1"
+@app.route("/form")
+def form():
+    return render_template("form.html")
 
-@app.route("/page2")
-def page2():
-    return "Tämä lienee sivu 2"
+@app.route("/order")
+def order():
+    return render_template("order.html")
 
-@app.route("/test")
-def test():
-    content = ""
-    for i in range(1, 101):
-        content += str(i) + " "
-    return content
+@app.route("/result", methods=["POST"])
+def result():
+    pizza = request.form["pizza"]
+    extras = request.form.getlist("extra")
+    message = request.form["message"]
+    return render_template("result.html", pizza=pizza, extras=extras, message=message)
 
 @app.route("/page/<int:page_id>")
 def page(page_id):
-    return "Tämä on sivu " + str(page_id)
+    return "Tämä lienee sivu " + str(page_id)
