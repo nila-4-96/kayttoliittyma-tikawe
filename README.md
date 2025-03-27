@@ -14,3 +14,4 @@ Nykyinen tila:
 * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
 * Käyttäjä pystyy lisäämään, muokkaamaan ja poistamaan päivityksiä.
 * Käyttäjä näkee sovellukseen lisätyt päivitykset. Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät päivitykset.
+* Käyttäjä pystyy etsimään päivityksiä hakusanalla. Käyttäjä pystyy hakemaan sekä itse lisäämiään että muiden käyttäjien lisäämiä päivityksiä.
