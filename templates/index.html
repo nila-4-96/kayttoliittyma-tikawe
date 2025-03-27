@@ -33,11 +33,11 @@
   <form action="/new_thread" method="post">
     <p>
       Otsikko:<br />
-      <input type="text" name="title" />
+      <input type="text" name="title" maxlength="50" required />
     </p>
     <p>
       Viesti:<br />
-      <textarea name="content" rows="5" cols="40"></textarea>
+      <textarea name="content" rows="5" cols="40" maxlength="1000"></textarea>
     </p>
     <input type="submit" value="Lähetä" />
   </form>
