@@ -10,7 +10,7 @@
 
   <hr />
   {% for message in messages %}
-  <p>
+  <p id="{{ message.id }}">
     {{ message.username }} ({{ message.sent_at }}):
   </p>
   <p>
