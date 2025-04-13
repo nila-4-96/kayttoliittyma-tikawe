@@ -32,6 +32,11 @@
     <a href="/thread/{{ thread.id }}">{{ thread.title }}</a>
     <br />
     {{ thread.total }} viestiä, uusin {{ thread.last }}
+    <p>
+    Tyyppi: {{ thread.type }} <br />
+    Käsittelytila: {{ thread.status }} <br />
+    Prioriteetti: {{ thread.priority }} <br />
+    </p>
   </p>
   <hr />
   {% endfor %}
@@ -48,6 +53,34 @@
       Viesti:<br />
       <textarea name="content" rows="5" cols="40" maxlength="5000"></textarea>
     </p>
+
+    <p>
+      <label for="type">Tyyppi:</label>
+      <select name="type" id="type">
+        <option value="Info">Info</option>
+        <option value="Kysymys">Kysymys</option>
+        <option value="Ilmoitus">Ilmoitus</option>
+      </select>
+    </p>
+
+    <p>
+      <label for="status">Käsittelytila:</label>
+      <select name="status" id="status">
+        <option value="Lähetetty">Lähetetty</option>
+        <option value="Vastaanotettu">Vastaanotettu</option>
+        <option value="Käsitellään">Käsitellään</option>
+        <option value="Käsitelty">Käsitelty</option>
+      </select>
+    </p>
+    <p>
+      <label for="priority">Prioriteetti:</label>
+      <select name="priority" id="priority">
+        <option value="Matala">Matala</option>
+        <option value="Keskiverto">Keskiverto</option>
+        <option value="Korkea">Korkea</option>
+      </select>
+    </p>
+
     <input type="submit" value="Lähetä" />
   </form>
   {% endif %}

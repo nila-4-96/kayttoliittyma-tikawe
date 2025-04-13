@@ -12,7 +12,10 @@
   {% for message in messages %}
   <p id="{{ message.id }}">
     <a href="/user/{{ message.user_id }}">{{ message.username }}</a>
-    ({{ message.sent_at }}):
+    ({{ message.sent_at }}): <br />
+    Tyyppi: {{ thread.type }} <br />
+    Käsittelytila: {{ thread.status }} <br />
+    Prioriteetti: {{ thread.priority }} <br />
   </p>
   <p>
     {{ message.content | show_lines }}
@@ -26,6 +29,7 @@
   <hr />
   {% endfor %}
 
+
   {% if session.user_id %}
   <h2>Uusi viesti</h2>
 
@@ -34,6 +38,7 @@
       <label for="content">Viesti:</label><br />
       <textarea name="content" rows="5" cols="40" maxlength="5000"></textarea>
     </p>
+
     <input type="hidden" name="thread_id" value="{{ thread.id }}" />
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä" />

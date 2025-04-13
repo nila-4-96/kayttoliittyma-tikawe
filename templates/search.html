@@ -8,6 +8,10 @@
 <body>
   <h1>Haku</h1>
 
+  <p>
+    <a href="/">Etusivulle</a>
+  </p>
+
   <form action="/search" method="get">
     <p>
       Hakusana:
@@ -17,10 +21,29 @@
       <input type="text" name="query" />
       {% endif %}
     </p>
+    <p>
+      Luokitus:
+      <input type="checkbox" name="type" value="Info"> Info
+      <input type="checkbox" name="type" value="Kysymys"> Kysymys
+      <input type="checkbox" name="type" value="Ilmoitus"> Ilmoitus
+    </p>
+    <p>
+      Käsittelytila:
+      <input type="checkbox" name="status" value="Lähetetty"> Lähetetty
+      <input type="checkbox" name="status" value="Vastaanotettu"> Vastaanotettu
+      <input type="checkbox" name="status" value="Käsitellään"> Käsitellään
+      <input type="checkbox" name="status" value="Käsitelty"> Käsitelty
+    </p>
+    
+      Prioriteetti:
+      <input type="checkbox" name="priority" value="Matala"> Matala
+      <input type="checkbox" name="priority" value="Keskiverto"> Keskiverto
+      <input type="checkbox" name="priority" value="Korkea"> Korkea
+    </p>
     <input type="submit" value="Hae" />
   </form>
 
-  {% if query %}
+  {% if results %}
   <hr />
   <h2>Tulokset</h2>
   

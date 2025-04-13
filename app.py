@@ -51,8 +51,12 @@ def index(page=1):
 @app.route("/search")
 def search():
     query = request.args.get("query")
-    results = forum.search(query) if query else []
-    return render_template("search.html", query=query, results=results)
+    type = request.args.getlist("type")
+    status = request.args.getlist("status")
+    priority = request.args.getlist("priority")
+  
+    results = forum.search(query, type, status, priority) if query or type or status or priority else []
+    return render_template("search.html", query=query, type=type, status=status, priority=priority, results=results)
 
 
 @app.route("/user/<int:user_id>")
@@ -78,11 +82,16 @@ def show_thread(thread_id):
 def new_thread():
     title = request.form["title"]
     content = request.form["content"]
+
+    type = request.form["type"]
+    status = request.form["status"]
+    priority = request.form["priority"]
+
     if not title or len(title) > 100 or len(content) > 5000:
         abort(403)
     user_id = session["user_id"]
 
-    thread_id = forum.add_thread(title, content, user_id)
+    thread_id = forum.add_thread(title, content, type, status, priority, user_id)
     return redirect("/thread/" + str(thread_id))
 
 
@@ -95,8 +104,12 @@ def new_message():
     user_id = session["user_id"]
     thread_id = request.form["thread_id"]
 
+    type = request.form.get("type")
+    status = request.form.get("status")
+    priority = request.form.get("priority")
+
     try:
-        forum.add_message(content, user_id, thread_id)
+        forum.add_message(content, user_id, thread_id, type, status, priority)
     except sqlite3.IntegrityError:
         abort(403)
 
@@ -167,22 +180,21 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html", next_page=request.referrer)
+        return render_template("login.html")
     
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        next_page = request.form["next_page"]
 
         user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
             session["csrf_token"] = secrets.token_hex(16)
             flash("Olet kirjautunut sisään.", "success")
-            return redirect(next_page)
+            return redirect("/")
         else:
             flash("VIRHE: väärä tunnus tai salasana, ole hyvä ja kokeile uudestaan.", "error")
-            return render_template("login.html", next_page=next_page)
+            return render_template("login.html")
 
 
 @app.route("/logout")
