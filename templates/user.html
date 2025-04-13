@@ -9,7 +9,7 @@
   <h1>Käyttäjä {{ user.username }}</h1>
 
   {% if user.has_image %}
-  <img src="/image/{{ user.id }}">
+  <img src="/image/{{ user.id }}" alt="Käyttäjän {{ user.username }} kuva" \>
   {% endif %}
 
   {% if user.id == session.user_id %}

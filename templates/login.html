@@ -16,7 +16,14 @@
     {% endif %}
   {% endwith %}
 
+  {% if next_page %}
+  <input type="hidden" name="next_page" value="{{ next_page }}" />
+  {% else %}
+  <input type="hidden" name="next_page" value="/" />
+  {% endif %}
+
   <form action="/login" method="post">
+    
     <p>
       Tunnus: <br />
       <input type="text" name="username" />

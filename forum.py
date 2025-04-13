@@ -65,4 +65,6 @@ def search(query):
              ORDER BY m.sent_at DESC"""
     return db.query(sql, ["%" + query + "%"])
 
-
+def update_message(message_id, content):
+    sql = "UPDATE messages SET content = ? WHERE id = ?"
+    db.execute(sql, [content, message_id])

@@ -15,7 +15,7 @@
     ({{ message.sent_at }}):
   </p>
   <p>
-    {{ message.content }}
+    {{ message.content | show_lines }}
   </p>
   {% if message.user_id == session.user_id %}
   <p>
@@ -31,10 +31,11 @@
 
   <form action="/new_message" method="post">
     <p>
-      Viesti:<br />
+      <label for="content">Viesti:</label><br />
       <textarea name="content" rows="5" cols="40" maxlength="5000"></textarea>
     </p>
     <input type="hidden" name="thread_id" value="{{ thread.id }}" />
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä" />
   </form>
   <hr />
