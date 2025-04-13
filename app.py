@@ -1,7 +1,8 @@
 import sqlite3
 import os
+import math, time
 from flask import Flask
-from flask import redirect, render_template, request, session, abort, url_for, make_response, flash
+from flask import redirect, render_template, request, session, abort, url_for, make_response, flash, g
 import config, forum, users
 from functools import wraps
 
@@ -24,9 +25,20 @@ def require_login(f):
     return decorated_function
 
 @app.route("/")
-def index():
-    threads = forum.get_threads()
-    return render_template("index.html", threads=threads)
+@app.route("/<int:page>")
+def index(page=1):
+    page_size = 10
+    thread_count = forum.get_thread_count()
+    page_count = math.ceil(thread_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect("/1")
+    if page > page_count:
+        return redirect("/" + str(page_count))
+
+    threads = forum.get_threads(page, page_size)
+    return render_template("index.html", page=page, page_count=page_count, threads=threads)
 
 @app.route("/search")
 def search():
@@ -185,4 +197,14 @@ def show_image(user_id):
 
     response = make_response(bytes(image))
     response.headers.set("Content-Type", "image/jpeg")
+    return response
+
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    elapsed_time = round(time.time() - g.start_time, 2)
+    print("elapsed time:", elapsed_time, "s")
     return response

@@ -18,3 +18,5 @@ CREATE TABLE messages (
     user_id INTEGER REFERENCES users,
     thread_id INTEGER REFERENCES threads
 );
+
+CREATE INDEX idx_thread_messages ON messages (thread_id);

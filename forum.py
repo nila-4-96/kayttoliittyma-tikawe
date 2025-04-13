@@ -1,12 +1,19 @@
 import db
 
-def get_threads():
+def get_threads(page, page_size):
     sql = """SELECT t.id, t.title, COUNT(m.id) total, MAX(m.sent_at) last
              FROM threads t, messages m
              WHERE t.id = m.thread_id
              GROUP BY t.id
-             ORDER BY t.id DESC"""
-    return db.query(sql)
+             ORDER BY t.id DESC
+             LIMIT ? OFFSET ?"""
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [limit, offset])
+
+def get_thread_count():
+    sql = "SELECT COUNT(*) FROM threads"
+    return db.query(sql)[0][0]
 
 def get_thread(thread_id):
     sql = "SELECT id, title FROM threads WHERE id = ?"
@@ -57,3 +64,5 @@ def search(query):
                    m.content LIKE ?
              ORDER BY m.sent_at DESC"""
     return db.query(sql, ["%" + query + "%"])
+
+
