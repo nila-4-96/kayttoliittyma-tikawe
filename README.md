@@ -19,3 +19,10 @@ Nykyinen tila:
 * Käyttäjä pystyy etsimään päivityksiä hakusanalla tai luokituksella. Käyttäjä pystyy hakemaan sekä itse lisäämiään että muiden käyttäjien lisäämiä päivityksiä.
 * Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja ja käyttäjän lisäämät päivitykset, sekä profiilikuvan.
 
+Asennusohjeet (Linux):
+* Kopioi repositorio
+* Suorita seuraavat kopioidussa repositoriossa:  
+  python3 -m venv venv
+  source venv/bin/activate
+  pip install flask
+  flask run
