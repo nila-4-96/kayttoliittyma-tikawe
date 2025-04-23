@@ -21,14 +21,14 @@ def require_login(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if "user_id" not in session:
-            return redirect(url_for('login', next=request.url))
+            return redirect(url_for("login", next=request.url))
         return f(*args, **kwargs)
     return decorated_function
 
 
 def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
-        abort(403)
+        abort(403, "CSRF-virhe.")
 
 
 @app.route("/")
@@ -80,6 +80,8 @@ def show_thread(thread_id):
 @app.route("/new_thread", methods=["POST"])
 @require_login
 def new_thread():
+    check_csrf()
+
     title = request.form["title"]
     content = request.form["content"]
 
@@ -88,7 +90,7 @@ def new_thread():
     priority = request.form["priority"]
 
     if not title or len(title) > 100 or len(content) > 5000:
-        abort(403)
+        abort(403, "VIRHE: Otsikko tai viesti on liian pitkä.")
     user_id = session["user_id"]
 
     thread_id = forum.add_thread(title, content, type, status, priority, user_id)
@@ -98,9 +100,11 @@ def new_thread():
 @app.route("/new_message", methods=["POST"])
 @require_login
 def new_message():
+    check_csrf()
+
     content = request.form["content"]
     if len(content) > 5000:
-        abort(403)
+        abort(403, "VIRHE: Viesti on liian pitkä.")
     user_id = session["user_id"]
     thread_id = request.form["thread_id"]
 
@@ -111,7 +115,7 @@ def new_message():
     try:
         forum.add_message(content, user_id, thread_id, type, status, priority)
     except sqlite3.IntegrityError:
-        abort(403)
+        abort(403, "IntegrityError")
 
     return redirect("/thread/" + str(thread_id))
 
@@ -121,15 +125,16 @@ def new_message():
 def edit_message(message_id):
     message = forum.get_message(message_id)
     if not message or message["user_id"] != session["user_id"]:
-        abort(403)
+        abort(403, "VIRHE: Voit muokata vain omia viestejä.")
 
     if request.method == "GET":
         return render_template("edit.html", message=message)
 
     if request.method == "POST":
+        check_csrf()
         content = request.form["content"]
         if len(content) > 5000:
-            abort(403)
+            abort(403, "VIRHE: Viesti on liian pitkä.")
         forum.update_message(message["id"], content)
         return redirect("/thread/" + str(message["thread_id"]))
 
@@ -139,12 +144,13 @@ def edit_message(message_id):
 def remove_message(message_id):
     message = forum.get_message(message_id)
     if not message or message["user_id"] != session["user_id"]:
-        abort(403)
+        abort(403, "VIRHE: Voit poistaa vain omat viestit.")
 
     if request.method == "GET":
         return render_template("remove.html", message=message)
 
     if request.method == "POST":
+        check_csrf()
         if "continue" in request.form:
             forum.remove_message(message["id"])
         return redirect("/thread/" + str(message["thread_id"]))
@@ -157,24 +163,26 @@ def register():
 
     if request.method == "POST":
         username = request.form["username"]
-        if not username or len(username) > 16:
-            abort(403)
+        if not username:
+            abort(403, "VIRHE: Käyttäjätunnus on pakollinen.")
+        if len(username) < 3 or len(username) > 16:
+            abort(403, "VIRHE: Käyttäjätunnuksen on oltava 3-16 merkin pituinen.")
         password1 = request.form["password1"]
         password2 = request.form["password2"]
 
-        if password1 != password2:
-            flash("VIRHE: salasanat eivät ole samat, ole hyvä ja kokeile uudestaan.", "error")
-            filled = {"username": username}
-            return render_template("register.html", filled=filled)
+    if password1 != password2:
+        flash("VIRHE: salasanat eivät ole samat, ole hyvä ja kokeile uudestaan.", "error")
+        filled = {"username": username}
+        return render_template("register.html", filled=filled)
 
-        try:
-            users.create_user(username, password1)
-            flash("Tunnus luotu, voit nyt kirjautua sisään.", "success")
-            return redirect("/login")
-        except sqlite3.IntegrityError:
-            flash("VIRHE: tunnus on jo varattu. Ole hyvä ja kokeile toista tunnusta.", "error")
-            filled = {"username": username}
-            return render_template("register.html", filled=filled)
+    try:
+        users.create_user(username, password1)
+        flash("Tunnus luotu, voit nyt kirjautua sisään.", "success")
+        return redirect("/login")
+    except sqlite3.IntegrityError:
+        flash("VIRHE: tunnus on jo varattu. Ole hyvä ja kokeile toista tunnusta.", "error")
+        filled = {"username": username}
+        return render_template("register.html", filled=filled)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -211,6 +219,7 @@ def add_image():
         return render_template("add_image.html")
 
     if request.method == "POST":
+        check_csrf()
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
             flash("VIRHE: Lähettämäsi tiedosto ei ole jpg-tiedosto")
@@ -231,7 +240,7 @@ def add_image():
 def show_image(user_id):
     image = users.get_image(user_id)
     if not image:
-        abort(404)
+        abort(404, "VIRHE: Kuvaa ei ole.")
 
     response = make_response(bytes(image))
     response.headers.set("Content-Type", "image/jpeg")
