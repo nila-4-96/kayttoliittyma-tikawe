@@ -1,0 +1,38 @@
+body {
+    margin: auto;
+    max-width: 70em;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #2B3133;
+}
+
+.header {
+    background-color: #20A3C0;
+    color: #2B3D41;
+    border: 2px solid #01C0EA;
+    padding: 1em;
+    margin: 0.5em 0;
+}
+
+.nav {
+    background-color: #20A3C0;
+    color: #2B3D41;
+    border: 2px solid #01C0EA;
+    padding: 1.5em;
+    margin: 1em 0;
+}
+
+.content {
+    background-color: #20A3C0;
+    color: #2B3D41;
+    border: 2px solid #01C0EA;
+    padding: 2.5em;
+    margin: 3em 0;
+}
+
+.content p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+
