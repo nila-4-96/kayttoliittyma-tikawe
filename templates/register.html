@@ -3,10 +3,13 @@
 
 <head>
   <title>Luo tunnus</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
-  <h1>Luo tunnus</h1>
+  <div class="header">
+    <h1>Luo tunnus</h1>
+  </div>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -16,26 +19,31 @@
     {% endif %}
   {% endwith %}
 
-  <form action="/register" method="post">
+  <div class="nav">
     <p>
-      Tunnus: <br />
-      <input type="text" name="username" value="{{ filled.username }}" maxlength="16" />
+      <a href="/">Etusivulle</a>
     </p>
-    <p>
-      Salasana: <br />
-      <input type="password" name="password1" />
-    </p>
-    <p>
-      Salasana uudestaan: <br />
-      <input type="password" name="password2" />
-    </p>
-    <input type="submit" value="Luo tunnus" />
-  </form>
+  </div>
 
-  <hr />
-  <p>
-    <a href="/">Etusivulle</a>
-  </p>
+  <div class="content">
+    <form action="/register" method="post">
+      <p>
+        Tunnus: <br />
+        <input type="text" name="username" value="{{ filled.username }}" maxlength="16" />
+      </p>
+      <p>
+        Salasana: <br />
+        <input type="password" name="password1" />
+      </p>
+      <p>
+        Salasana uudestaan: <br />
+        <input type="password" name="password2" />
+      </p>
+      <input type="submit" value="Luo tunnus" />
+    </form>
+    <hr />
+  </div>
+
 </body>
 
 </html>

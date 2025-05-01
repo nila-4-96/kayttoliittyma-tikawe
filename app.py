@@ -30,7 +30,6 @@ def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
         abort(403, "CSRF-virhe.")
 
-
 @app.route("/")
 @app.route("/<int:page>")
 def index(page=1):
@@ -108,12 +107,8 @@ def new_message():
     user_id = session["user_id"]
     thread_id = request.form["thread_id"]
 
-    type = request.form.get("type")
-    status = request.form.get("status")
-    priority = request.form.get("priority")
-
     try:
-        forum.add_message(content, user_id, thread_id, type, status, priority)
+        forum.add_message(content, user_id, thread_id)
     except sqlite3.IntegrityError:
         abort(403, "IntegrityError")
 

@@ -3,11 +3,21 @@
 
 <head>
     <title>Lisää profiilikuva</title>
+    <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
+  <div class="header">
     <h1> Lisää profiilikuva</h1>
+  </div> 
 
+  <div class="nav">
+      <p>
+        <a href="/">Poistu tallentamatta</a>
+      </p>
+  </div>
+
+  <div class="content">
     <p>
         jpg-tiedosto, koko enintään 100kt
     </p>
@@ -29,6 +39,7 @@
         <b>{{ message }}</b>
     </p>
     {% endfor %}
+  </div>
 
 </body>
 </html>

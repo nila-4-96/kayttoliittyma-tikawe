@@ -1,4 +1,5 @@
 import db
+from datetime import datetime
 
 def get_threads(page, page_size):
     sql = """SELECT t.id, t.title, COUNT(m.id) total, MAX(m.sent_at) last, t.type, t.status, t.priority
@@ -28,7 +29,7 @@ def get_messages(thread_id):
     return db.query(sql, [thread_id])
 
 def get_message(message_id):
-    sql = """SELECT m.id, m.content, m.user_id, m.thread_id, t.type, t.status, t.priority
+    sql = """SELECT m.id, m.content, m.user_id, m.thread_id
              FROM messages m, threads t
              WHERE m.id = ? AND t.id = m.thread_id"""
     result = db.query(sql, [message_id])
@@ -38,13 +39,13 @@ def add_thread(title, content, type, status, priority, user_id):
     sql = "INSERT INTO threads (title, type, status, priority, user_id) VALUES (?, ?, ?, ?, ?)"
     db.execute(sql, [title, type, status, priority, user_id])
     thread_id = db.last_insert_id()
-    add_message(content, user_id, thread_id, type, status, priority)
+    add_message(content, user_id, thread_id)
     return thread_id
 
-def add_message(content, user_id, thread_id, type, status, priority):
-    sql = """INSERT INTO messages (content, sent_at, user_id, thread_id, type, status, priority) VALUES
-             (?, datetime('now'), ?, ?, ?, ?, ?)"""
-    db.execute(sql, [content, user_id, thread_id, type, status, priority])
+def add_message(content, user_id, thread_id):
+    sql = """INSERT INTO messages (content, user_id, thread_id, sent_at)
+             VALUES (?, ?, ?, ?)"""
+    db.execute(sql, [content, user_id, thread_id, datetime.now()])
 
 def update_message(message_id, content):
     sql = "UPDATE messages SET content = ? WHERE id = ?"
@@ -58,6 +59,7 @@ def search(query, type, status, priority):
     sql = """SELECT m.id message_id,
                     m.thread_id,
                     t.title thread_title,
+                    m.content,
                     m.sent_at,
                     u.username
              FROM threads t, messages m, users u

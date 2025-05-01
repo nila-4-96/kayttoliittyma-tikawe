@@ -3,20 +3,32 @@
 
 <head>
   <title>Viestin poisto</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
-  <h1>Viestin poisto</h1>
+  <div class="header">
+    <h1>Viestin poisto</h1>
+  </div>
 
-  <form action="/remove/{{ message.id }}" method="post">
+  <div class="nav">
     <p>
-      Haluatko varmasti poistaa viestin?
+      <a href="/">Peruuta</a>
     </p>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" name="continue" value="Jatka" />
-    <input type="submit" name="cancel" value="Peruuta" />
-    
-  </form>
+  </div>
+
+  <div class="content">
+    <form action="/remove/{{ message.id }}" method="post">
+      <p>
+        Haluatko varmasti poistaa viestin?
+      </p>
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="submit" name="continue" value="Jatka" />
+      <input type="submit" name="cancel" value="Peruuta" />
+      
+    </form>
+  </div>
+
 </body>
 
 </html>

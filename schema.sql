@@ -19,10 +19,7 @@ CREATE TABLE messages (
     content TEXT,
     sent_at TEXT,
     user_id INTEGER REFERENCES users,
-    thread_id INTEGER REFERENCES threads,
-    type TEXT not NULL,
-    status TEXT not NULL,
-    priority TEXT not NULL
-);
+    thread_id INTEGER REFERENCES threads
+    );
 
 CREATE INDEX idx_thread_messages ON messages (thread_id);
