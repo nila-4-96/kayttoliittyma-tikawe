@@ -104,7 +104,8 @@ def new_thread():
     priority = request.form["priority"]
 
     if not title or len(title) > 100 or len(content) > 5000:
-        abort(403, "VIRHE: Otsikko tai viesti on liian pitkä.")
+        flash ("VIRHE: Otsikko tai viesti on liian pitkä.", "error")
+        return redirect("/")
     user_id = session["user_id"]
 
     thread_id = forum.add_thread(title, content, post_type, status, priority, user_id)
@@ -118,7 +119,9 @@ def new_message():
 
     content = request.form["content"]
     if len(content) > 5000:
-        abort(403, "VIRHE: Viesti on liian pitkä.")
+        flash("VIRHE: Viesti on liian pitkä, maksimipituus on 5000 merkkiä.", "error")
+        return redirect("/thread/" + request.form["thread_id"])
+
     user_id = session["user_id"]
     thread_id = request.form["thread_id"]
 
@@ -144,7 +147,8 @@ def edit_message(message_id):
         check_csrf()
         content = request.form["content"]
         if len(content) > 5000:
-            abort(403, "VIRHE: Viesti on liian pitkä.")
+            flash("VIRHE: Viesti on liian pitkä, maksimipituus on 5000 merkkiä.", "error")
+            return redirect("/edit/" + str(message_id))
         forum.update_message(message["id"], content)
         return redirect("/thread/" + str(message["thread_id"]))
 
@@ -177,9 +181,11 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         if not username:
-            abort(403, "VIRHE: Käyttäjätunnus on pakollinen.")
+            flash("VIRHE: Käyttäjätunnus ei saa olla tyhjä!", "error")
+            return redirect("/register")
         if len(username) < 3 or len(username) > 16:
-            abort(403, "VIRHE: Käyttäjätunnuksen on oltava 3-16 merkin pituinen.")
+            flash("VIRHE: Käyttäjätunnuksen on oltava 3-16 merkin pituinen.", "error")
+            return redirect("/register")
         password1 = request.form["password1"]
         password2 = request.form["password2"]
 

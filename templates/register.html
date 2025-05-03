@@ -12,16 +12,18 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">{{ message }}</div>
+          <div class="info alert alert-{{ category }}">{{ message }}</div>
         {% endfor %}
       {% endif %}
     {% endwith %}
   </div>
   
   <div class="nav">
-    <p>
-      <a href="/">Etusivulle</a>
-    </p>
+    <nav>
+        <p>
+        <a href="/">Etusivulle</a>
+        </p>
+    </nav>
   </div>
 
   <div class="content">

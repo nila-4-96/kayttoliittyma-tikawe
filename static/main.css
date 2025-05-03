@@ -1,3 +1,14 @@
+/*
+Color scheme for CSS-code
+#01C0EA
+#40A8BF
+#20A3C0
+#305861
+#2B3C40
+#2B3133
+#1B4F5A
+*/
+
 body {
     margin: auto;
     max-width: 70em;
@@ -7,15 +18,16 @@ body {
 
 .header {
     background-color: #20A3C0;
-    color: #2B3D41;
+    color: #2B3133;
     border: 2px solid #01C0EA;
     padding: 1em;
     margin: 0.5em 0;
+    text-align: center;
 }
 
 .nav {
     background-color: #20A3C0;
-    color: #2B3D41;
+    color: #2B3133;
     border: 2px solid #01C0EA;
     padding: 1.5em;
     margin: 1em 0;
@@ -23,7 +35,7 @@ body {
 
 .content {
     background-color: #20A3C0;
-    color: #2B3D41;
+    color: #2B3133;
     border: 2px solid #01C0EA;
     padding: 2.5em;
     margin: 3em 0;
@@ -32,7 +44,58 @@ body {
 .content p {
     word-wrap: break-word;
     overflow-wrap: break-word;
-    white-space: pre-wrap;
 }
 
+.thread {
+    border: 2px solid #2B3133;
+    margin: 1em;
+    padding: 0.2em 0.5em;
+}
 
+.info {
+    border: 2px solid #2B3133;
+    margin: 1em;
+    padding: 0.5em;
+    background-color: #1B4F5A;
+    color: #FFFFFF;
+}
+
+nav {
+    text-align: center;
+}
+
+nav ul {
+    padding: 0;
+    margin: 0;
+}
+
+nav li {
+    display: inline;
+    padding: 0 1em;
+    margin: 0;
+}
+
+nav li:not(:last-of-type) {
+    border-right: 1px solid #2B3133;
+}
+
+.search-group {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #2B3133;
+}
+
+.search-group p {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.search-option {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.search-option input[type="checkbox"] {
+    margin-right: 5px;
+}

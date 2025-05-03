@@ -9,17 +9,26 @@
 <body>
   <div class="header">
     <h1> Lisää profiilikuva</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="info alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
   </div> 
 
   <div class="nav">
+    <nav>
       <p>
         <a href="/">Poistu tallentamatta</a>
       </p>
+    </nav>
   </div>
 
   <div class="content">
     <p>
-        jpg-tiedosto, koko enintään 100kt
+        Voit lisätä jpg-tiedoston millä koko enintään 100kt.
     </p>
 
     <form action="/add_image" method="post" enctype="multipart/form-data">

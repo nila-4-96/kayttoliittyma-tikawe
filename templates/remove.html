@@ -9,12 +9,21 @@
 <body>
   <div class="header">
     <h1>Viestin poisto</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="info alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
   </div>
 
   <div class="nav">
-    <p>
-      <a href="/">Peruuta</a>
-    </p>
+    <nav>
+        <p>
+        <a href="/">Peruuta</a>
+        </p>
+    </nav>
   </div>
 
   <div class="content">

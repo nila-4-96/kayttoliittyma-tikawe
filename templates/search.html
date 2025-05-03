@@ -7,50 +7,64 @@
 </head>
 
 <body>
-  <div class="header">
-    <h1>Haku</h1>
-  </div>
+    <div class="header">
+        <h1>Haku</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="info alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
 
-  <div class="nav">
-    <p>
-      <a href="/">Etusivulle</a>
-    </p>
-  </div>
+    <div class="nav">
+        <nav>
+            <p>
+            <a href="/">Etusivulle</a>
+            </p>
+        </nav>
+    </div>
 
-  <div class="content">
-    <form action="/search" method="get">
-      <p>
-        Hakusana:
-        {% if query %}
-        <input type="text" name="query" value="{{ query }}" />
-        {% else %}
-        <input type="text" name="query" />
-        {% endif %}
-      </p>
-      <p>
-        Luokitus:
-        <input type="checkbox" name="post_type" value="Info"> Info
-        <input type="checkbox" name="post_type" value="Kysymys"> Kysymys
-        <input type="checkbox" name="post_type" value="Ilmoitus"> Ilmoitus
-      </p>
-      <p>
-        Käsittelytila:
-        <input type="checkbox" name="status" value="Lähetetty"> Lähetetty
-        <input type="checkbox" name="status" value="Vastaanotettu"> Vastaanotettu
-        <input type="checkbox" name="status" value="Käsitellään"> Käsitellään
-        <input type="checkbox" name="status" value="Käsitelty"> Käsitelty
-      </p>
-      <p>
-        Prioriteetti:
-        <input type="checkbox" name="priority" value="Matala"> Matala
-        <input type="checkbox" name="priority" value="Keskiverto"> Keskiverto
-        <input type="checkbox" name="priority" value="Korkea"> Korkea
-      </p>
-      <input type="submit" value="Hae" />
-    </form>
+    <div class="content">
+        <form action="/search" method="get">
+        <p>
+            Hakusana:
+            {% if query %}
+            <input type="text" name="query" value="{{ query }}" />
+            {% else %}
+            <input type="text" name="query" />
+            {% endif %}
+        </p>
+        <div class="search-group">
+            <p>Luokitus:</p>
+            <div class="search-options">
+            <label class="search-option"><input type="checkbox" name="post_type" value="Info"> Info</label>
+            <label class="search-option"><input type="checkbox" name="post_type" value="Kysymys"> Kysymys</label>
+            <label class="search-option"><input type="checkbox" name="post_type" value="Ilmoitus"> Ilmoitus</label>
+            </div>
+        </div>
+        <div class="search-group">
+            <p>Käsittelytila:</p>
+            <div class="search-options">
+            <label class="search-option"><input type="checkbox" name="status" value="Lähetetty"> Lähetetty</label>
+            <label class="search-option"><input type="checkbox" name="status" value="Vastaanotettu"> Vastaanotettu</label>
+            <label class="search-option"><input type="checkbox" name="status" value="Käsitellään"> Käsitellään</label>
+            <label class="search-option"><input type="checkbox" name="status" value="Käsitelty"> Käsitelty</label>
+            </div>
+        </div>
+        <div class="search-group">
+            <p>Prioriteetti:</p>
+            <div class="search-options">
+            <label class="search-option"><input type="checkbox" name="priority" value="Matala"> Matala</label>
+            <label class="search-option"><input type="checkbox" name="priority" value="Keskiverto"> Keskiverto</label>
+            <label class="search-option"><input type="checkbox" name="priority" value="Korkea"> Korkea</label>
+            </div>
+        </div>
+        <input type="submit" value="Hae" />
+        </form>
 
     {% if results %}
-    <hr />
     <h2>Tulokset</h2>
     
     <ul>
@@ -65,8 +79,6 @@
     {% endfor %}
     </ul>
     {% endif %}
-
-  </div>
+    </div>
 </body>
-
 </html>

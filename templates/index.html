@@ -9,43 +9,44 @@
 <body>
   <div class="header">
     <h1>Keskustelupalsta</h1>
-
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">{{ message }}</div>
+          <div class="info alert alert-{{ category }}">{{ message }}</div>
         {% endfor %}
       {% endif %}
     {% endwith %}
   </div>
 
   <div class="nav">
-    <p>
-      <a href="/search">Haku</a> |
-      {% if session.user_id %}
-      <a href="/logout">Kirjaudu ulos</a> |
-      <a href="/user/{{ session.user_id }}">Oma profiili</a> |
-      {% else %}
-      <a href="/login">Kirjaudu sisään</a> |
-      <a href="/register">Luo tunnus</a> |
-      {% endif %}
-    </p>
+    <nav>
+        <p>
+        <a href="/search">Haku</a> |
+        {% if session.user_id %}
+        <a href="/logout">Kirjaudu ulos</a> |
+        <a href="/user/{{ session.user_id }}">Oma profiili</a> |
+        {% else %}
+        <a href="/login">Kirjaudu sisään</a> |
+        <a href="/register">Luo tunnus</a> |
+        {% endif %}
+        </p>
+    </nav>
   </div>
 
   <div class="content">
-    <hr />
     {% for thread in threads %}
-    <p>
-      <a href="/thread/{{ thread.id }}">{{ thread.title }}</a>
-      <br />
-      {{ thread.total }} viestiä, uusin {{ thread.last }}
+    <div class="thread">
       <p>
-      Tyyppi: {{ thread.post_type }} <br />
-      Käsittelytila: {{ thread.status }} <br />
-      Prioriteetti: {{ thread.priority }} <br />
+        <a href="/thread/{{ thread.id }}">{{ thread.title }}</a>
+        <br />
+        {{ thread.total }} viestiä, uusin {{ thread.last }}
+        <p>
+        Tyyppi: {{ thread.post_type }} <br />
+        Käsittelytila: {{ thread.status }} <br />
+        Prioriteetti: {{ thread.priority }} <br />
+        </p>
       </p>
-    </p>
-    <hr />
+    </div>
     {% endfor %}
 
     {% if session.user_id %}
