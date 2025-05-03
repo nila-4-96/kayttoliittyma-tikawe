@@ -8,14 +8,18 @@ def get_connection():
     con.set_trace_callback(print)
     return con
 
-def execute(sql, params=[]):
+def execute(sql, params=None):
+    if params is None:
+        params = []
     con = get_connection()
     result = con.execute(sql, params)
     con.commit()
     g.last_insert_id = result.lastrowid
     con.close()
 
-def query(sql, params=[]):
+def query(sql, params=None):
+    if params is None:
+        params = []
     con = get_connection()
     result = con.execute(sql, params).fetchall()
     con.close()

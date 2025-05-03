@@ -19,10 +19,21 @@ Nykyinen tila:
 * Käyttäjä pystyy valitsemaan päivitykselle yhden tai useamman luokittelun (esim. päivityksen tyyppi, käsittelytila (vastaanotettu, käsitellään, käsitelty), ja tärkeysaste).
 * Käyttäjä pystyy kommentoimaan toisten käyttäjien päivityksiä.
 
+Muita huomioita:
+* Sovelluksen toimintaa on testattu suurella tietomäärällä. Indeksit ovat lisätty tietokantaan. Omilla testauksilla etusivun sekä keskustelujen lataukset kestivät ~0.01s, ja käyttäjien profiilien lataukset kestivät noin 0.1-0.2s. Sovelluksen mukana liitetty seed.py -tiedosto jolla voi tätä testata omalla koneella.
+
 Asennusohjeet (Linux):
 * kopioi repositorio koneellesi
 * suorita ladatussa kansiossa seuraavat:
 * `python3 -m venv venv`
 * `source venv/bin/activate`
+* `pip install flask`
+* `flask run`
+
+Asennusohjeet (Windows):
+* kopioi repositorio koneellesi
+* suorita ladatussa kansiossa seuraavat:
+* `python3 -m venv venv`
+* `venv/Scripts/Activate.ps1`
 * `pip install flask`
 * `flask run`

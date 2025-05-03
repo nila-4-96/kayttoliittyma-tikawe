@@ -9,15 +9,15 @@
 <body>
   <div class="header">
     <h1>Keskustelupalsta</h1>
-  </div>
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
 
   <div class="nav">
     <p>
@@ -40,7 +40,7 @@
       <br />
       {{ thread.total }} viestiä, uusin {{ thread.last }}
       <p>
-      Tyyppi: {{ thread.type }} <br />
+      Tyyppi: {{ thread.post_type }} <br />
       Käsittelytila: {{ thread.status }} <br />
       Prioriteetti: {{ thread.priority }} <br />
       </p>
@@ -63,8 +63,8 @@
       </p>
 
       <p>
-        <label for="type">Tyyppi:</label>
-        <select name="type" id="type">
+        <label for="post_type">Tyyppi:</label>
+        <select name="post_type" id="post_type">
           <option value="Info">Info</option>
           <option value="Kysymys">Kysymys</option>
           <option value="Ilmoitus">Ilmoitus</option>

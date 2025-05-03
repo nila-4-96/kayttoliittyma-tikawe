@@ -1,10 +1,17 @@
-import sqlite3
+import math
 import os
-import math, time, secrets, markupsafe
-from flask import Flask
-from flask import redirect, render_template, request, session, abort, url_for, make_response, flash, g
-import config, forum, users
+import secrets
+import sqlite3
+import time
 from functools import wraps
+
+from flask import Flask, url_for, make_response, flash, g
+from flask import redirect, render_template, request, session, abort
+import markupsafe
+
+import config
+import forum
+import users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -13,18 +20,16 @@ DATABASE_FILE = "database.db"
 SCHEMA_FILE = "schema.sql"
 
 if not os.path.exists(DATABASE_FILE):
-    with sqlite3.connect(DATABASE_FILE) as conn, open(SCHEMA_FILE, "r") as f:
+    with sqlite3.connect(DATABASE_FILE) as conn, open(SCHEMA_FILE, "r", encoding="utf-8") as f:
         conn.executescript(f.read())
 
-
-def require_login(f):
-    @wraps(f)
+def require_login(func):
+    @wraps(func)
     def decorated_function(*args, **kwargs):
         if "user_id" not in session:
             return redirect(url_for("login", next=request.url))
-        return f(*args, **kwargs)
+        return func(*args, **kwargs)
     return decorated_function
-
 
 def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
@@ -50,12 +55,22 @@ def index(page=1):
 @app.route("/search")
 def search():
     query = request.args.get("query")
-    type = request.args.getlist("type")
+    post_type = request.args.getlist("post_type")
     status = request.args.getlist("status")
     priority = request.args.getlist("priority")
-  
-    results = forum.search(query, type, status, priority) if query or type or status or priority else []
-    return render_template("search.html", query=query, type=type, status=status, priority=priority, results=results)
+
+    results = forum.search(query, post_type, status, priority) if (
+        query or post_type or status or priority
+    ) else []
+
+    return render_template(
+        "search.html",
+        query=query,
+        post_type=post_type,
+        status=status,
+        priority=priority,
+        results=results,
+    )
 
 
 @app.route("/user/<int:user_id>")
@@ -84,7 +99,7 @@ def new_thread():
     title = request.form["title"]
     content = request.form["content"]
 
-    type = request.form["type"]
+    post_type = request.form["post_type"]
     status = request.form["status"]
     priority = request.form["priority"]
 
@@ -92,7 +107,7 @@ def new_thread():
         abort(403, "VIRHE: Otsikko tai viesti on liian pitkä.")
     user_id = session["user_id"]
 
-    thread_id = forum.add_thread(title, content, type, status, priority, user_id)
+    thread_id = forum.add_thread(title, content, post_type, status, priority, user_id)
     return redirect("/thread/" + str(thread_id))
 
 
@@ -133,6 +148,8 @@ def edit_message(message_id):
         forum.update_message(message["id"], content)
         return redirect("/thread/" + str(message["thread_id"]))
 
+    return abort(403, "Tuntematon virhe!")
+
 
 @app.route("/remove/<int:message_id>", methods=["GET", "POST"])
 @require_login
@@ -150,6 +167,7 @@ def remove_message(message_id):
             forum.remove_message(message["id"])
         return redirect("/thread/" + str(message["thread_id"]))
 
+    return abort(403, "Tuntematon virhe!")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -165,26 +183,27 @@ def register():
         password1 = request.form["password1"]
         password2 = request.form["password2"]
 
-    if password1 != password2:
-        flash("VIRHE: salasanat eivät ole samat, ole hyvä ja kokeile uudestaan.", "error")
-        filled = {"username": username}
-        return render_template("register.html", filled=filled)
+        if password1 != password2:
+            flash("VIRHE: salasanat eivät ole samat, ole hyvä ja kokeile uudestaan.", "error")
+            filled = {"username": username}
+            return render_template("register.html", filled=filled)
 
-    try:
-        users.create_user(username, password1)
-        flash("Tunnus luotu, voit nyt kirjautua sisään.", "success")
-        return redirect("/login")
-    except sqlite3.IntegrityError:
-        flash("VIRHE: tunnus on jo varattu. Ole hyvä ja kokeile toista tunnusta.", "error")
-        filled = {"username": username}
-        return render_template("register.html", filled=filled)
+        try:
+            users.create_user(username, password1)
+            flash("Tunnus luotu, voit nyt kirjautua sisään.", "success")
+            return redirect("/login")
+        except sqlite3.IntegrityError:
+            flash("VIRHE: tunnus on jo varattu. Ole hyvä ja kokeile toista tunnusta.", "error")
+            filled = {"username": username}
+            return render_template("register.html", filled=filled)
 
+    return abort(403, "Tuntematon virhe!")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
         return render_template("login.html")
-    
+
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -195,10 +214,11 @@ def login():
             session["csrf_token"] = secrets.token_hex(16)
             flash("Olet kirjautunut sisään.", "success")
             return redirect("/")
-        else:
-            flash("VIRHE: väärä tunnus tai salasana, ole hyvä ja kokeile uudestaan.", "error")
-            return render_template("login.html")
 
+        flash("VIRHE: väärä tunnus tai salasana, ole hyvä ja kokeile uudestaan.", "error")
+        return render_template("login.html")
+
+    return render_template("login.html")
 
 @app.route("/logout")
 @require_login
@@ -229,6 +249,8 @@ def add_image():
         users.update_image(user_id, image)
         flash("Kuva on onnistuneesti lisätty.")
         return redirect("/user/" + str(user_id))
+
+    return render_template("add_image.html")
 
 
 @app.route("/image/<int:user_id>")
