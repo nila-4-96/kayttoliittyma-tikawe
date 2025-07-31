@@ -30,8 +30,35 @@
     <form action="/edit/{{ message.id }}" method="post">
       <p>
         Viesti:<br />
-        <textarea name="content" rows="5" cols="40">{{ message.content }}</textarea>
+        <textarea name="content" rows="5" cols="40" required>{{ message.content }}</textarea>
       </p>
+      <p>
+        <label for="post_type">Tyyppi:</label>
+        <select name="post_type" id="post_type" required>
+          <option value="Info" {% if message.post_type == "Info" %}selected{% endif %}>Info</option>
+          <option value="Kysymys" {% if message.post_type == "Kysymys" %}selected{% endif %}>Kysymys</option>
+          <option value="Ilmoitus" {% if message.post_type == "Ilmoitus" %}selected{% endif %}>Ilmoitus</option>
+        </select>
+      </p>
+
+      <p>
+        <label for="status">Käsittelytila:</label>
+        <select name="status" id="status" required>
+          <option value="Lähetetty" {% if message.status == "Lähetetty" %}selected{% endif %}>Lähetetty</option>
+          <option value="Vastaanotettu" {% if message.status == "Vastaanotettu" %}selected{% endif %}>Vastaanotettu</option>
+          <option value="Käsitellään" {% if message.status == "Käsitellään" %}selected{% endif %}>Käsitellään</option>
+          <option value="Käsitelty" {% if message.status == "Käsitelty" %}selected{% endif %}>Käsitelty</option>
+        </select>
+      </p>
+      <p>
+        <label for="priority">Prioriteetti:</label>
+        <select name="priority" id="priority" required>
+          <option value="Matala" {% if message.priority == "Matala" %}selected{% endif %}>Matala</option>
+          <option value="Keskiverto" {% if message.priority == "Keskiverto" %}selected{% endif %}>Keskiverto</option>
+          <option value="Korkea" {% if message.priority == "Korkea" %}selected{% endif %}>Korkea</option>
+        </select>
+      </p>
+
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="submit" value="Lähetä" />
     </form>

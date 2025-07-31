@@ -48,6 +48,13 @@ def add_message(content, user_id, thread_id):
              VALUES (?, ?, ?, ?)"""
     db.execute(sql, [content, user_id, thread_id, datetime.now()])
 
+def update_thread(message_id, title, content, post_type, status, priority):
+    sql = """UPDATE threads
+             SET title = ?, post_type = ?, status = ?, priority = ?
+             WHERE id = (SELECT thread_id FROM messages WHERE id = ?)"""
+    db.execute(sql, [title, post_type, status, priority, message_id])
+    update_message(message_id, content)
+
 def update_message(message_id, content):
     sql = "UPDATE messages SET content = ? WHERE id = ?"
     db.execute(sql, [content, message_id])

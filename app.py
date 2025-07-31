@@ -132,7 +132,6 @@ def new_message():
 
     return redirect("/thread/" + str(thread_id))
 
-
 @app.route("/edit/<int:message_id>", methods=["GET", "POST"])
 @require_login
 def edit_message(message_id):
@@ -146,14 +145,55 @@ def edit_message(message_id):
     if request.method == "POST":
         check_csrf()
         content = request.form["content"]
+        post_type = request.form["post_type"]
+        status = request.form["status"]
+        priority = request.form["priority"]
+
         if len(content) > 5000:
             flash("VIRHE: Viesti on liian pitkä, maksimipituus on 5000 merkkiä.", "error")
             return redirect("/edit/" + str(message_id))
-        forum.update_message(message["id"], content)
+
+        thread = forum.get_thread(message["thread_id"])
+        if not thread:
+            abort(404, "VIRHE: Käsittelemääsi ketjua ei ole olemassa.")
+
+        forum.update_thread(message["id"], thread["title"], content, post_type, status, priority)
         return redirect("/thread/" + str(message["thread_id"]))
 
     return abort(403, "Tuntematon virhe!")
 
+@app.route("/edit_thread/<int:message_id>", methods=["GET", "POST"])
+@require_login
+def edit_thread(message_id):
+    message = forum.get_message(message_id)
+    if not message or message["user_id"] != session["user_id"]:
+        abort(403, "VIRHE: Voit muokata vain omia viestejä.")
+
+    thread = forum.get_thread(message["thread_id"])
+    if not thread:
+        abort(404, "VIRHE: Käsittelemääsi ketjua ei ole olemassa.")
+
+    if request.method == "GET":
+        return render_template("edit_thread.html", message=message, thread=thread)
+
+    if request.method == "POST":
+        check_csrf()
+        title = request.form["title"]
+        content = request.form["content"]
+        post_type = request.form["post_type"]
+        status = request.form["status"]
+        priority = request.form["priority"]
+
+        if not title or len(title) > 100 or len(content) > 5000:
+            flash("VIRHE: Otsikko tai viesti on liian pitkä.", "error")
+            return redirect("/edit_thread/" + str(message_id))
+
+        forum.update_thread(message["id"], title, content, post_type, status, priority)
+        forum.update_message(message["id"], content, post_type=post_type, status=status)
+
+        return redirect("/thread/" + str(message["thread_id"]))
+
+    return abort(403, "Tuntematon virhe!")
 
 @app.route("/remove/<int:message_id>", methods=["GET", "POST"])
 @require_login
