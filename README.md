@@ -34,10 +34,7 @@ Asennusohjeet (Windows):
 * kopioi repositorio koneellesi
 * suorita ladatussa kansiossa seuraavat:
 * `python -m venv venv`
-* Käynnistäminen:
-    * Powershell:
-        * - `venv/Scripts/Activate.ps1`
-    * Command prompt:
-        * - `venv\Scripts\activate.bat`
+* Käynnistäminen (PowerShell):
+   *  `venv/Scripts/Activate.ps1`
 * `pip install flask`
 * `flask run`
