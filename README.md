@@ -12,7 +12,7 @@ Tavoitteet:
 
 Nykyinen tila:
 * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen, sekä lisäämään itsellensä profiilikuvan.
-* Käyttäjä pystyy lisäämään, muokkaamaan ja poistamaan päivityksiä.
+* Käyttäjä pystyy lisäämään, muokkaamaan ja poistamaan päivityksiä. Kokonaisen viestiketjun saa poistettua poistamalla ketjun ensimmäisen viestin.
 * Käyttäjä näkee sovellukseen lisätyt päivitykset. Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät päivitykset.
 * Käyttäjä pystyy etsimään päivityksiä hakusanalla tai muulla perusteella. Käyttäjä pystyy hakemaan sekä itse lisäämiään että muiden käyttäjien lisäämiä päivityksiä.
 * Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja ja käyttäjän lisäämät päivitykset.
@@ -35,9 +35,9 @@ Asennusohjeet (Windows):
 * suorita ladatussa kansiossa seuraavat:
 * `python -m venv venv`
 * Käynnistäminen:
-    Powershell:
-        - `venv/Scripts/Activate.ps1`
-    Command prompt:
-        - `venv\Scripts\activate.bat`
+    * Powershell:
+        * - `venv/Scripts/Activate.ps1`
+    * Command prompt:
+        * - `venv\Scripts\activate.bat`
 * `pip install flask`
 * `flask run`
