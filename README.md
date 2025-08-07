@@ -21,6 +21,7 @@ Nykyinen tila:
 
 Muita huomioita:
 * Sovelluksen toimintaa on testattu suurella tietomäärällä. Indeksit ovat lisätty tietokantaan. Omilla testauksilla etusivun sekä keskustelujen lataukset kestivät ~0.01s, ja käyttäjien profiilien lataukset kestivät noin 0.1-0.2s. Sovelluksen mukana liitetty seed.py -tiedosto jolla voi tätä testata omalla koneella.
+* Sovellus alustaa tietokannan automaattisesti ensimmäisellä käynnistyskerralla.
 
 Asennusohjeet (Linux):
 * kopioi repositorio koneellesi
